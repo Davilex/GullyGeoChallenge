@@ -125,4 +125,4 @@ if Tej_1_3_csv == '#' or not Tej_1_3_csv:
     Tej_1_3_csv = "D:\\GullyGeoChallenge\\data\\Results.gdb\\Tej_1_3.csv"
 arcpy.ExportXYv_stats(Values_Extracted_To_Points__3_, Value_Field, Delimiter, Tej_1_3_csv, Add_Field_Names_to_Output)
 
-# If not creating correct output, there is a model in the Scripts/Python folder that runs the analysis in ArcGIS
+########## End of Script ##########
