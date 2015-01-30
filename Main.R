@@ -8,8 +8,8 @@ rm(list = ls())
 ls()
 
 # Check Working Directory
-setwd("GullyGeoChallenge")
 getwd()
+# setwd("D:/GullyGeoChallenge")
 
 # Set username
 username = "Gully Bully"
