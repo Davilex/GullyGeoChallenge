@@ -12,7 +12,7 @@
 ########### Make sure to download the DEM of the Tejeria region (northern Spain).
 ########### The file can be downloaded from the following link:
 ########### https://sendit.wur.nl/Download.aspx?id=d6917691-0e09-4d22-ba08-1eeacba84d08
-########### "Place the DEM in the following directory: "D:\\GS_Final\\data"
+########### "Place the DEM in the following directory: "D:\\GullyGeoChallenge\\data"
 
 
 
@@ -23,14 +23,14 @@ import arcpy
 arcpy.CheckOutExtension("spatial")
 
 # Load required toolboxes
-arcpy.ImportToolbox("D:/GS_Final/Scripting/Python/CreatePointsFromLinesTool/CreatePointsFromLines.pyt")
+arcpy.ImportToolbox("D:/GullyGeoChallenge/Scripting/Python/CreatePointsFromLinesTool/CreatePointsFromLines.pyt")
 
 # Set Geoprocessing environments
 arcpy.env.newPrecision = "DOUBLE"
 arcpy.env.autoCommit = "1000"
 arcpy.env.XYResolution = "0.001 Meters"
 arcpy.env.XYDomain = ""
-arcpy.env.scratchWorkspace = "D:\\GS_Final\\data\\Step.gdb"
+arcpy.env.scratchWorkspace = "D:\\GullyGeoChallenge\\data\\Step.gdb"
 arcpy.env.cartographicPartitions = ""
 arcpy.env.terrainMemoryUsage = "true"
 arcpy.env.MTolerance = ""
@@ -67,10 +67,13 @@ arcpy.env.ZResolution = ""
 arcpy.env.mask = ""
 arcpy.env.spatialGrid3 = "0"
 arcpy.env.maintainSpatialIndex = "false"
-arcpy.env.workspace = "D:\\GS_Final\\data\\Step.gdb"
+arcpy.env.workspace = "D:\\GullyGeoChallenge\\data\\Step.gdb"
 arcpy.env.MResolution = ""
 arcpy.env.derivedPrecision = "DOUBLE"
 arcpy.env.ZTolerance = ""
+
+# Overwrite pre-existing files
+arcpy.env.overwriteOutput = True
 
 # Local variables:
 Selected_Points = Expression
@@ -88,8 +91,8 @@ Field_Name = "Distance"
 Field_Name__2_ = "Distance"
 Expression__2_ = "([OBJECTID] -1) * 0.05"
 Field_Type = "FLOAT"
-tejeria_dsm_medium_tif = "D:\\GS_Final\\data\\Init.gdb\\tejeria_dsm_medium.tif"
-GPS_Points_Tejeria_shp = "D:\\GS_Final\\data\\GPS_Points_Tejeria.shp"
+tejeria_dsm_medium_tif = "D:\\GullyGeoChallenge\\data\\Init.gdb\\tejeria_dsm_medium.tif"
+GPS_Points_Tejeria_shp = "D:\\GullyGeoChallenge\\data\\GPS_Points_Tejeria.shp"
 
 # Process: Select
 # Set GPS points in the expression below or choose them when running the model in ArcGIS.
@@ -119,6 +122,6 @@ arcpy.CalculateField_management(Values_Extracted_To_Points__2_, Field_Name__2_, 
 # Process: Export Feature Attribute to ASCII
 Tej_1_3_csv = arcpy.GetParameterAsText(1)
 if Tej_1_3_csv == '#' or not Tej_1_3_csv:
-    Tej_1_3_csv = "D:\\GS_Final\\data\\Results.gdb\\Tej_1_3.csv"
+    Tej_1_3_csv = "D:\\GullyGeoChallenge\\data\\Results.gdb\\Tej_1_3.csv"
 arcpy.ExportXYv_stats(Values_Extracted_To_Points__3_, Value_Field, Delimiter, Tej_1_3_csv, Add_Field_Names_to_Output)
 
