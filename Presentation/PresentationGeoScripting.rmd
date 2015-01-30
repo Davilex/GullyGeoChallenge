@@ -1,0 +1,172 @@
+---
+title: "Determining accuracy of gully features in a DEM"
+author: 'Team Gully Bully:  David Scholte-Albers'
+date: "Friday, January 30, 2015"
+output: slidy_presentation
+
+---
+
+## Introduction
+
+Thesis about classification of Gullies in Navarre, Spain
+
+- DEM made from UAV (12cm resolution)
+- Field measurements
+
+**Research Question:**
+*Are gully features visible in the DEM and to what extent?*
+
+**Objective:**
+*Find out what the difference in gully profile is when comparing ground truth measurements with DEM crosssections.*
+
+---
+
+## Gullies in the field look like this
+
+![Gully in the field](http://s24.postimg.org/heax6k6at/Gully1.jpg)
+
+---
+
+## Steps to take
+
+1. Extract DEM values for the same locations as ground truth cross sections with Python
+
+2. Save results in  .csv files that can be loaded into R
+
+3. Conduct analysis in R
+
+![Python and R logo](http://s23.postimg.org/3z3cb2y6j/R_Python.jpg)
+
+---
+
+## Python
+```{r, eval=FALSE}
+# Load required toolbox for creating points from a line
+arcpy.ImportToolbox("D:/GS_Final/Scripting/Python/CreatePointsFromLinesTool.pyt")
+
+# Set GPS points in the expression below or choose them when running the model in ArcGIS.
+# Replace one of the following GPS-point combinations for the 001 and 003 in the expression.
+# (001, 003); (013, 016); (026, 028); (039, 041); (048, 050);
+# (073, 075); (078, 079); (0115, 0117); (0146, 0147); (0148, 0149)
+
+Expression = "\"id\" = 'TEJGUL001' OR \"id\" = 'TEJGUL003'" 
+arcpy.Select_analysis(GPS_Points_Tejeria_shp, Selected_Points, Expression)
+
+# Processes:  Points To Line > Create Points Along Lines >
+#             Extract Values to Points > Add Field (Distance)
+#             Calculate Field (Distance) >
+
+# Export Feature Attribute to ASCII
+# Change the numbers in Tej_1_3 into the GPS points specified in the select tool.
+Tej_1_3_csv = "D:\\GS_Final\\data\\Results.gdb\\Tej_1_3.csv"
+arcpy.ExportXYv_stats(Values_Extracted_To_Points__3_, Value_Field, Delimiter, 
+                      Tej_1_3_csv, Add_Field_Names_to_Output)
+```
+
+---
+
+## R - Initialisation
+
+```{r, eval=FALSE}
+rm(list = ls())
+ls()
+
+# Set Username
+username <- "Gully Bully"
+
+# Check Working Directory
+setwd("D:/GS_Final")
+getwd()
+
+# import libraries
+library(ggplot2)
+library(gridExtra)
+
+# import functions
+source("Final_Project/R/FinalProjectDavid/Load_Field_and_DEM_CSV_Data.R")
+source("Final_Project/R/FinalProjectDavid/Make_Gully_Plots.R")
+source("Final_Project/R/FinalProjectDavid/Combine_Plots.R")
+source("Final_Project/R/FinalProjectDavid/Conclusion.R")
+```
+
+---
+
+## R - Data Processing
+```{r, eval=FALSE}
+# Function for loading the gully .csv data. Changing the numbers in the GPS_points
+# vector, will load data for a different gully.
+GPS_points <- c(26,28) # Specify numbers based on above list
+DEM_values <- load_dem_data(GPS_points[1], GPS_points[2])
+Field_values <- load_field_data(GPS_points[1], GPS_points[2])
+
+load_dem_data <- function (GPSpoint1, GPSpoint2) {
+  file_loc <- paste("DEMs/Results.gdb/Tej_", GPSpoint1, "_", GPSpoint2, 
+                    ".csv", sep="")
+  Gully_DEM<- read.csv(file_loc)
+}
+
+load_field_data <- function (GPSpoint1, GPSpoint2) {
+  file_loc <- paste("DEMs/Results.gdb/Tej_", GPSpoint1, "_", GPSpoint2, 
+                    "_field_meas.csv", sep="") 
+  Gully_DEM<- read.csv(file_loc, sep=";")
+}
+# Add Depth Field to Gully_DEM
+DEM_values$Depth <- DEM_values$RASTERVALU[1] - DEM_values$RASTERVALU
+```
+
+---
+
+## R - Data Visualisation
+```{r, eval=FALSE}
+# Function that will extract the columns of interest from the data frames, 
+# for creating crosssections of the same gully (DEM & Field measurements).
+make_dem_plot <- function(Gully_DEM) {
+  Depth_DEM <- Gully_DEM$Depth
+  Distance_DEM <- Gully_DEM$DISTANCE
+  ggplot(data=Gully_DEM, aes(x=DISTANCE, y=Depth, group=1)) + 
+    geom_line(colour="red", size=2) + 
+    geom_point(colour= "black", size=4) + 
+    xlim(0, max(Distance_DEM)) +
+    ylim(max(Depth_DEM), -0.1) +
+    xlab("Distance (m)") + ylab("Depth (m)") + ggtitle("Gully Cross Section DEM")
+}
+```
+
+---
+
+## Plots of the DEM profile (left) and Field profile (right)
+```{r, eval=FALSE}
+plot_DEM <- make_dem_plot(DEM_values)
+plot_field <- make_field_plot(Field_values)
+grid.arrange(plot_DEM, plot_field, ncol=2)
+```
+![Plotted besides each other](http://s27.postimg.org/qq0fanlmr/Combined_Plot.png)
+
+---
+
+## Plotting the profiles and their difference in the same plot
+```{r, eval=FALSE}
+# Plot DEM and Field profile in same plot and add a profile of the difference
+make_plot(DEM_values, Field_values)
+lines(Field_values$Length, difference_per_5_cm, lwd=6, col="Black")
+legend("bottomright", c("Field","DEM", "Difference"), lty=c(1,1,1), lwd=c(4, 4, 4),col=c("blue","red", "Black")) #add legend
+
+```
+![Combined in one plot](http://s18.postimg.org/tpcduse6x/Gully_Cross_Section_In_One_Plot.png)
+
+---
+
+## Conclusion
+```{r, eval=FALSE}
+print(conclusion())
+```
+[1] "Welcome Gully Bully! Thank you for using this lovely tool to determine the difference in depth between a real gully and the same gully in a DEM. The GPS points you chose (26 and 28) createad a nice gully crosssection. The accuracy of the DEM however is a bit disappointing, because there is a mean difference of 0.49m and a mean standard deviation of 0.33m. The largest difference between DEM and field measurement is 0.88m. Thank you for using this tool, we hope to see you again."
+
+---
+
+## What have I learned from this course
+- Structure your code, and think about the steps to take before starting right ahead.
+
+- Organize your data. Again, in the last week my data was all over the place. It takes longer to get the data back in order, than to keep the data structured from the start.
+
+- I was slightly afraid of scripts and programming. Being thrown in at the deep end several times during this course, and finally figuring out (with lots of trial and error) what to do actually feels satisfying and gives confidence (and a headache).
