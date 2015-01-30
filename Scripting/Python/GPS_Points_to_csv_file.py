@@ -88,7 +88,7 @@ Field_Name = "Distance"
 Field_Name__2_ = "Distance"
 Expression__2_ = "([OBJECTID] -1) * 0.05"
 Field_Type = "FLOAT"
-tejeria_dsm_medium_tif = "D:\\GS_Final\\data\\tejeria_dsm_medium.tif"
+tejeria_dsm_medium_tif = "D:\\GS_Final\\data\\Init.gdb\\tejeria_dsm_medium.tif"
 GPS_Points_Tejeria_shp = "D:\\GS_Final\\data\\GPS_Points_Tejeria.shp"
 
 # Process: Select
