@@ -8,11 +8,11 @@ rm(list = ls())
 ls()
 
 # Check Working Directory
-setwd("D:/GS_Final")
+setwd("GullyGeoChallenge")
 getwd()
 
 # Set username
-username = "David"
+username = "Gully Bully"
 
 # Load packages
 require(ggplot2)
