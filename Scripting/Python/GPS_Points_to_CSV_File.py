@@ -78,10 +78,10 @@ GPS_Points_Tejeria_shp = "D:/GullyGeoChallenge/data/GPS_points/GPS_Points_Tejeri
 # Process: Select
 # Set GPS points in the expression below.
 # Replace one of the following combinations for the 001 and 003 in the expression.
-# Valid combinations are: (001, 003); (013, 016); (026, 028); (039, 041); (048, 050);
+# Valid combinations are: (001, 003); (0013, 0016); (0026, 0028); (039, 041); (048, 050);
 # (073, 075); (078, 079); (0115, 0117); (0146, 0147); (0148, 0149)
 
-Expression = "\"id\" = 'TEJGUL001' OR \"id\" = 'TEJGUL003'"
+Expression = "\"id\" = 'TEJGUL0026' OR \"id\" = 'TEJGUL0028'"
 Selected_Points = "D:/GullyGeoChallenge/data/Step.gdb/Selected_Points"
 arcpy.Select_analysis(GPS_Points_Tejeria_shp, Selected_Points, Expression)
 
@@ -107,6 +107,6 @@ arcpy.CalculateField_management(Values_Extracted_to_Points, "Distance", Expressi
 # Process: Export Feature Attribute to ASCII
 # Change the GPS number sin the Tej_csv parameter (1 and 3 set as standard) to the points chosen in the select tool above).
 # Leave the 0s in front of the numbers numbers away.
-Tej_csv = "D:/GullyGeoChallenge/data/Results.gdb/Tej_1_3.csv" 
+Tej_csv = "D:/GullyGeoChallenge/data/Results.gdb/Tej_26_28.csv" 
 arcpy.ExportXYv_stats(Values_Extracted_to_Points, "RASTERVALU;Distance", "COMMA", Tej_csv, "true")
 
