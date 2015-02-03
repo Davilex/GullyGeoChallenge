@@ -9,7 +9,7 @@
 
 ########### Make sure to download the DEM of the Tejeria region (northern Spain).
 ########### The file can be downloaded from the following link:
-########### https://sendit.wur.nl/Download.aspx?id=d6917691-0e09-4d22-ba08-1eeacba84d08
+########### https://sendit.wur.nl/Download.aspx?id=794ff435-2bdb-43c7-8eb1-2061e6a44c1c
 ########### "Place the DEM in the following directory: "D:\\GullyGeoChallenge\\data"
 
 # Import arcpy module
@@ -110,3 +110,5 @@ arcpy.CalculateField_management(Values_Extracted_to_Points, "Distance", Expressi
 Tej_csv = "D:/GullyGeoChallenge/data/Results.gdb/Tej_26_28.csv" 
 arcpy.ExportXYv_stats(Values_Extracted_to_Points, "RASTERVALU;Distance", "COMMA", Tej_csv, "true")
 
+print "Done"
+########## END OF SCRIPT ##########
