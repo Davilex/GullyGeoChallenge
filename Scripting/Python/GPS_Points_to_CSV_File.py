@@ -9,7 +9,7 @@
 
 ########### Make sure to download the DEM of the Tejeria region (northern Spain).
 ########### The file can be downloaded from the following link:
-########### https://sendit.wur.nl/Download.aspx?id=794ff435-2bdb-43c7-8eb1-2061e6a44c1c
+########### https://sendit.wur.nl/Download.aspx?id=f44d7c22-a89a-4bf8-9e95-fa3ee9a2978c
 ########### "Place the DEM in the following directory: "D:\\GullyGeoChallenge\\data"
 
 # Import arcpy module
